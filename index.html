@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no" />
+  <meta name="theme-color" content="#101218" />
+  <title>AI音声メモ</title>
+  <link rel="manifest" href="manifest.json" />
+  <link rel="icon" href="icons/icon-192.png" />
+  <link rel="apple-touch-icon" href="icons/icon-192.png" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- ===== メイン画面 ===== -->
+  <main id="main" class="screen">
+    <header class="topbar">
+      <span class="title">AI音声メモ</span>
+      <button id="settingsBtn" class="icon-btn" aria-label="設定">⚙️</button>
+    </header>
+
+    <section class="center">
+      <button id="recordBtn" class="record-btn" aria-label="録音開始">
+        <span class="mic-glyph">🎤</span>
+      </button>
+      <p id="status" class="status">待機中</p>
+    </section>
+
+    <section class="output-area">
+      <div id="interim" class="interim" aria-live="polite"></div>
+      <div id="result" class="result" aria-live="polite"></div>
+      <button id="copyBtn" class="copy-btn hidden">コピー</button>
+    </section>
+  </main>
+
+  <!-- ===== 設定画面 ===== -->
+  <div id="settings" class="screen settings hidden">
+    <header class="topbar">
+      <span class="title">設定</span>
+      <button id="settingsCloseBtn" class="icon-btn" aria-label="閉じる">✕</button>
+    </header>
+
+    <div class="form">
+      <label class="field">
+        <span>Anthropic APIキー</span>
+        <div class="key-row">
+          <input id="apiKey" type="password" inputmode="text" autocomplete="off"
+                 spellcheck="false" placeholder="sk-ant-..." />
+          <button id="toggleKey" type="button" class="ghost-btn" aria-label="表示切替">👁</button>
+        </div>
+      </label>
+
+      <label class="field">
+        <span>モデル（任意・既定でOK）</span>
+        <input id="model" type="text" autocomplete="off" spellcheck="false" />
+        <small class="hint">既定: <code>claude-haiku-4-5</code>（軽量・低コスト）</small>
+      </label>
+
+      <button id="saveBtn" class="save-btn">保存してメインへ</button>
+
+      <p class="warn">
+        ⚠️ APIキーはこの端末内（localStorage）にのみ保存され、ブラウザから直接Anthropic
+        APIへ送信されます。<b>共有端末では使わない</b>でください。利用上限・予算を絞った
+        専用キーの利用を推奨します。
+      </p>
+    </div>
+  </div>
+
+  <!-- ===== インストール促し ===== -->
+  <button id="installBtn" class="install-btn hidden">ホーム画面に追加</button>
+
+  <!-- ===== トースト ===== -->
+  <div id="toast" class="toast hidden"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>

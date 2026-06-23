@@ -113,7 +113,11 @@ function buildRecognition() {
       setStatus('待機中');
     } else if (e.error === 'network') {
       toast('音声認識サーバーに接続できません', 'err');
+    } else if (e.error === 'language-not-supported') {
+      toast('この端末は日本語音声認識に未対応です', 'err');
     }
+    // 原因特定用：エラー種別を画面に表示（no-speech/aborted含む）
+    setStatus('認識エラー: ' + e.error + (isRecording ? '（再開中）' : ''));
     // no-speech / aborted はonendで再開
   };
 

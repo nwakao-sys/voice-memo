@@ -1,5 +1,5 @@
 /* Service Worker — GitHub Pages のサブパス公開でも壊れないよう全て相対パスで記述 */
-const CACHE = 'voicememo-v1';
+const CACHE = 'voicememo-v2';
 
 // SW自身の位置を基準にした相対パス（サブパス配信でも正しく解決される）
 const ASSETS = [

@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no" />
   <meta name="theme-color" content="#101218" />
-  <title>AI音声メモ</title>
+  <title>AI音声メモ → Obsidian</title>
   <link rel="manifest" href="manifest.json" />
   <link rel="icon" href="icons/icon-192.png" />
   <link rel="apple-touch-icon" href="icons/icon-192.png" />
@@ -28,7 +28,35 @@
     <section class="output-area">
       <div id="interim" class="interim" aria-live="polite"></div>
       <div id="result" class="result" aria-live="polite"></div>
-      <button id="copyBtn" class="copy-btn hidden">コピー</button>
+
+      <!-- 清書完了後にのみ表示する機能ボタン群（Typeless風） -->
+      <div id="tools" class="tools hidden">
+        <div class="tool-row">
+          <button class="tool-btn" data-act="short">短く</button>
+          <button class="tool-btn" data-act="long">長く/詳しく</button>
+          <button class="tool-btn" data-act="formal">フォーマル</button>
+          <button class="tool-btn" data-act="casual">カジュアル</button>
+          <button class="tool-btn" data-act="bullets">箇条書き化</button>
+          <button class="tool-btn" data-act="restore">元に戻す</button>
+        </div>
+        <div class="tool-row translate-row">
+          <select id="langSelect" class="lang-select" aria-label="翻訳先言語">
+            <option value="英語">英語</option>
+            <option value="中国語（簡体字）">中国語(簡体)</option>
+            <option value="中国語（繁体字）">中国語(繁体)</option>
+            <option value="タイ語">タイ語</option>
+            <option value="韓国語">韓国語</option>
+            <option value="ベトナム語">ベトナム語</option>
+            <option value="ポルトガル語">ポルトガル語</option>
+            <option value="スペイン語">スペイン語</option>
+          </select>
+          <button class="tool-btn" data-act="translate">翻訳</button>
+        </div>
+        <div class="tool-row save-row">
+          <button id="copyBtn" class="tool-btn">コピー</button>
+          <button id="obsidianBtn" class="tool-btn obsidian">Obsidianに保存</button>
+        </div>
+      </div>
     </section>
   </main>
 
@@ -53,6 +81,49 @@
         <span>モデル（任意・既定でOK）</span>
         <input id="model" type="text" autocomplete="off" spellcheck="false" />
         <small class="hint">既定: <code>claude-haiku-4-5</code>（軽量・低コスト）</small>
+      </label>
+
+      <hr class="sep" />
+      <p class="section-label">Obsidian 保存設定</p>
+
+      <label class="field">
+        <span>vault名（Android版Obsidianの保管庫名と完全一致）</span>
+        <input id="obsVault" type="text" autocomplete="off" spellcheck="false" />
+      </label>
+
+      <label class="field">
+        <span>保存先フォルダ</span>
+        <input id="obsFolder" type="text" autocomplete="off" spellcheck="false" />
+      </label>
+
+      <label class="field">
+        <span>ファイル名テンプレート</span>
+        <input id="obsFname" type="text" autocomplete="off" spellcheck="false" />
+        <small class="hint">使えるトークン: <code>YYYY MM DD HH mm ss</code>（既定 <code>YYYY-MM-DD_HHmm</code>）</small>
+      </label>
+
+      <label class="toggle-field">
+        <span>清書完了で自動的にObsidianへ保存</span>
+        <input id="autoObs" type="checkbox" />
+      </label>
+      <small class="hint">OFFにすると「Obsidianに保存」ボタンで手動保存（連続メモ時のアプリ切替を避けたい人向け）。</small>
+
+      <hr class="sep" />
+      <p class="section-label">個人辞書（誤変換ふせぎ）</p>
+      <label class="field">
+        <span>固有名詞・専門用語（改行区切り）</span>
+        <textarea id="dict" rows="4" spellcheck="false"
+          placeholder="あとづけ屋&#10;マルチナビ&#10;CANバス"></textarea>
+        <small class="hint">清書プロンプトに注入され、正しい表記を優先します。</small>
+      </label>
+
+      <hr class="sep" />
+      <p class="section-label">Google Drive 保存（任意・上級）</p>
+      <label class="field">
+        <span>GAS Web App URL（空ならGoogleドキュメント保存なし）</span>
+        <input id="driveUrl" type="url" inputmode="url" autocomplete="off" spellcheck="false"
+               placeholder="https://script.google.com/macros/s/.../exec" />
+        <small class="hint">設定すると清書のたびにGoogleドキュメントへも追記（READMEのGAS手順参照）。</small>
       </label>
 
       <button id="saveBtn" class="save-btn">保存してメインへ</button>

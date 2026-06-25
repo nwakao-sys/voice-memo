@@ -193,9 +193,13 @@ function stopRecording() {
   setStatus('整えています…');
   setTimeout(() => {
     const text = (finalText + ' ' + (els.interim.textContent || '')).trim();
-    els.interim.textContent = '';
-    if (!text) {
+    // 認識できた生テキストを画面に出す（診断＆ユーザー確認用）
+    els.interim.textContent = text ? '🎙 認識: ' + text : '';
+    // 空、または文字が実質ない場合はClaudeに送らない
+    if (!text || text.replace(/[\s。、.,「」]/g, '').length === 0) {
       setStatus('待機中');
+      els.interim.textContent = '';
+      els.result.textContent = '⚠️ 音声が認識されませんでした。\n・Android Chromeで開いているか\n・マイクが「許可」か（アドレスバーの🔒）\n・話し始めてから1〜2秒待つ\nを確認してもう一度お試しください。';
       toast('音声が認識されませんでした', 'err');
       return;
     }
@@ -212,6 +216,11 @@ els.recordBtn.addEventListener('click', () => {
 // Claude 清書（ブラウザ直叩き）
 // ============================================================
 async function refineText(rawText) {
+  if (!rawText || !rawText.trim()) { // 空はClaudeに送らない（会話的応答を防ぐ）
+    setStatus('待機中');
+    toast('音声が認識されませんでした', 'err');
+    return;
+  }
   els.recordBtn.classList.add('busy');
   setStatus('AIが清書中…');
 
